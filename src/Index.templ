@@ -19,12 +19,12 @@ templ Index(allNote map[uint]string) {
 		</form>
 		<table>
 			<tr>
-				<th>id</th>
+				<th>No.</th>
 				<th colspan="2">Note</th>
 			</tr>
 				for k, v := range allNote {
 					<tr>
-						<td class="c-td">{fmt.Sprintln(k)}</td>
+						<td class="c-td">{fmt.Sprintf("%d", k)}</td> //replace k with number in Index.go
 						<td class="full">{v}</td>
 						<td class="c-td"> <a href={ templ.URL(fmt.Sprintf("/del?id=%d", k)) }>delete</a> </td>
 					</tr>

@@ -16,10 +16,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	theCookie, err := r.Cookie("IsThatACookie");
 	if err == http.ErrNoCookie {
 		if (r.Method == "POST" && r.URL.Path == "/varl") {
-			if (r.FormValue("passd") == "test") {
+			id := CheckAccount(r.FormValue("uname") ,r.FormValue("passd"));
+			if (id != -1) {
 				cookie := http.Cookie{
 					Name: "IsThatACookie",
-					Value: "1",
+					Value: f.Sprintf("%d",id),
 					Path: "/",
 					MaxAge: 180,
 					HttpOnly: true,
@@ -27,7 +28,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 					SameSite: http.SameSiteLaxMode,
 				}
 				http.SetCookie(w, &cookie);
-				Redirect("/").Render(r.Context(), w);
 			}
 			Redirect("/").Render(r.Context(), w);
 		} else if (r.URL.Path == "/reg") {

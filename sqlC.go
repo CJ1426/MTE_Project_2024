@@ -30,12 +30,12 @@ func ConnectToDB(dbPath string) *sql.DB {
 func getAllNote(userid string) map[uint]string {
 	AllNote := make(map[uint]string);
 	db := ConnectToDB("./db/note.db");
-	rows, err := db.Query("select * from notes where userid = ? order by id desc;", userid);
+	rows, err := db.Query("select id, note from notes where userid = ? order by id desc;", userid);
 	CheckError(err);
 	for rows.Next() {
 		var id uint;
 		var note string;
-		err := rows.Scan(&id, &note);
+		err := rows.Scan(&id, &note,);
 		CheckError(err);
 		AllNote[id] = note;
 	}
@@ -46,9 +46,9 @@ func getAllNote(userid string) map[uint]string {
 
 func AddNote(note string, userid string) {
 	db := ConnectToDB("./db/note.db");
-	statement, err := db.Prepare("insert into notes(note) values (?);");
+	statement, err := db.Prepare("insert into notes(note, userid) values (?,?);");
 	CheckError(err);
-	_ , err = statement.Exec(note);
+	_ , err = statement.Exec(note, userid);
 	CheckError(err);
 	db.Close();
 }
