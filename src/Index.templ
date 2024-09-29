@@ -1,0 +1,68 @@
+package main
+
+import "fmt"
+
+templ Index(allNote map[uint]string) {
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<title>Notes</title>
+	<link rel="stylesheet" href="/assets/ind.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+	
+	<h1>Notes</h1>
+		<form action="/add" method="post">
+			<input class="textbox" type="text" name="note" placeholder="Note" maxlength="100" autofocus required> 
+			<input class="btn" type="submit" value="add">
+		</form>
+		<table>
+			<tr>
+				<th>id</th>
+				<th colspan="2">Note</th>
+			</tr>
+				for k, v := range allNote {
+					<tr>
+						<td class="c-td">{fmt.Sprintln(k)}</td>
+						<td class="full">{v}</td>
+						<td class="c-td"> <a href={ templ.URL(fmt.Sprintf("/del?id=%d", k)) }>delete</a> </td>
+					</tr>
+				}
+		</table>
+	</body>
+	</html> 
+}
+
+templ EnterPW() {
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<title>Notes</title>
+			<link rel="stylesheet" href="/assets/ind.css">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+	<center>
+		<form action="/varl" method="post">
+			<input class="textbox" type="text" name="uname" placeholder="username" autofocus required></br> 
+			<input class="textbox" type="password" name="passd" placeholder="password" required></br>
+			<input class="btn" type="submit" value="login">
+		</form>
+	</center>
+	</body>
+	</html> 
+}
+
+templ Redirect(url string) {
+	<!DOCTYPE html>
+	<html>
+	<head>
+			<link rel="stylesheet" href="/assets/ind.css">
+			<meta http-equiv="refresh" content={ fmt.Sprintf("0; url=%s", url) }>
+	</head>
+	<body>
+		<a href={ templ.URL(url) }>redirect in a sec</a>
+	</body>
+	</html>
+}
