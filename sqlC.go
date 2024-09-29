@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 	f "fmt"
-	_ "crypto/sha256"
+	 "crypto/sha256"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -27,30 +27,24 @@ func ConnectToDB(dbPath string) *sql.DB {
 	return db;
 }
 
-func getAllNote() map[uint]string {
+func getAllNote(userid string) map[uint]string {
 	AllNote := make(map[uint]string);
 	db := ConnectToDB("./db/note.db");
-	//f.Println(reflect.TypeOf(db));
-	//f.Println(db);
-	rows, err := db.Query("select * from notes order by id desc;");
+	rows, err := db.Query("select * from notes where userid = ? order by id desc;", userid);
 	CheckError(err);
-	//f.Println(reflect.TypeOf(rows));
 	for rows.Next() {
 		var id uint;
 		var note string;
 		err := rows.Scan(&id, &note);
 		CheckError(err);
-		//f.Println(id);
-		//f.Println(note);
 		AllNote[id] = note;
 	}
 	rows.Close();
 	db.Close();
 	return AllNote;
-	//rows.Close();
 }
 
-func AddNote(note string) {
+func AddNote(note string, userid string) {
 	db := ConnectToDB("./db/note.db");
 	statement, err := db.Prepare("insert into notes(note) values (?);");
 	CheckError(err);
@@ -66,4 +60,41 @@ func DeleteNote(id string) {
 	_ , err = statement.Exec(id);
 	CheckError(err);
 	db.Close();
+}
+// -1 = nouser
+func CheckAccount(uname string, passd string) int {
+	command := "select uid from user where uname = ?";
+	db := ConnectToDB("./db/note.db");
+	if passd != "" {
+		passd = f.Sprintf("%x", sha256.Sum256([]byte (passd)));
+		command += " And passd = \"" + passd + "\"";
+	}
+	id := -1;
+	rows, err := db.Query(command, uname);
+	CheckError(err);
+	if rows.Next() {
+		err = rows.Scan(&id);
+		CheckError(err);
+	}
+	rows.Close();
+	db.Close();
+	return id;
+}
+//-1 = error
+func CreateUser(uname string, passd string) int {
+	if (CheckAccount(uname, "") == -1) {
+		//convert pass to hash
+		passd = f.Sprintf("%x", sha256.Sum256([]byte (passd)));
+		//connect to db
+		db := ConnectToDB("./db/note.db");
+		//insert data to table
+		statement, err := db.Prepare("insert into user(uname, passd) values(?, ?);");
+		res, err := statement.Exec(uname, passd);
+		CheckError(err);
+		//get last id
+		id, err := res.LastInsertId();
+		CheckError(err);
+		return int (id);
+	}
+	return -1;
 }

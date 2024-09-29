@@ -12,7 +12,7 @@ templ Index(allNote map[uint]string) {
 	</head>
 	<body>
 	
-	<h1>Notes</h1>
+	<h1>Notes</h1><a href="/logout">logout</a>
 		<form action="/add" method="post">
 			<input class="textbox" type="text" name="note" placeholder="Note" maxlength="100" autofocus required> 
 			<input class="btn" type="submit" value="add">
@@ -48,6 +48,27 @@ templ EnterPW() {
 			<input class="textbox" type="text" name="uname" placeholder="username" autofocus required></br> 
 			<input class="textbox" type="password" name="passd" placeholder="password" required></br>
 			<input class="btn" type="submit" value="login">
+			<a href="/reg">sign up</a>
+		</form>
+	</center>
+	</body>
+	</html> 
+}
+
+templ Regis() {
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<title>Notes</title>
+			<link rel="stylesheet" href="/assets/ind.css">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+	<center>
+		<form action="/reg" method="post">
+			<input class="textbox" type="text" name="uname" placeholder="username" autofocus required></br> 
+			<input class="textbox" type="password" name="passd" placeholder="password" required></br>
+			<input class="btn" type="submit" value="sign up">
 		</form>
 	</center>
 	</body>
