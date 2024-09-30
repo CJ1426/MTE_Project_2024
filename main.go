@@ -61,6 +61,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 					case "/del":
 						DeleteNote(r.URL.Query().Get("id"));
 						Redirect("/").Render(r.Context(), w);
+					case "/edit":
+						EditNote(r.URL.Query().Get("id"), GetNoteById(r.URL.Query().Get("id"), theCookie.Value)).Render(r.Context(), w);		
 					case "/logout":
 						cookie := http.Cookie{
 							Name: "IsThatACookie",
@@ -89,6 +91,9 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 		case "/add":
 			AddNote(r.FormValue("note"), theCookie.Value);
+			Redirect("/").Render(r.Context(), w);
+		case "/edit":
+			EditNoteQ(r.FormValue("note"), r.URL.Query().Get("id"));
 			Redirect("/").Render(r.Context(), w);
 		default:
 			notFound(w, r);		

@@ -26,7 +26,7 @@ templ Index(allNote map[uint]string) {
 					<tr>
 						<td class="c-td">{fmt.Sprintf("%d", k)}</td> //replace k with number in Index.go
 						<td class="full">{v}</td>
-						<td class="c-td"> <a href={ templ.URL(fmt.Sprintf("/del?id=%d", k)) }>delete</a> </td>
+						<td class="c-td"> <a href={ templ.URL(fmt.Sprintf("/del?id=%d", k)) }>delete</a> <a href={ templ.URL(fmt.Sprintf("/edit?id=%d", k)) }>edit</a> </td>
 					</tr>
 				}
 		</table>
@@ -86,4 +86,22 @@ templ Redirect(url string) {
 		<a href={ templ.URL(url) }>redirect in a sec</a>
 	</body>
 	</html>
+}
+
+templ EditNote(id string, note string) {
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<title>Notes</title>
+		<link rel="stylesheet" href="/assets/ind.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+	
+		<form action={ templ.URL(fmt.Sprintf("/edit?id="+id)) } method="post">
+			<input class="textbox" value={note} type="text" name="note" placeholder="Note" maxlength="100" autofocus required> 
+			<input class="btn" type="submit" value="update">
+		</form>
+	</body>
+	</html> 
 }

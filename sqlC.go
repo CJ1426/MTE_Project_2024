@@ -53,6 +53,29 @@ func AddNote(note string, userid string) {
 	db.Close();
 }
 
+func EditNoteQ(note string, noteid string) {
+	db := ConnectToDB("./db/note.db");
+	statement, err := db.Prepare("update notes set note = ? where id = ?;");
+	CheckError(err);
+	_ , err = statement.Exec(note, noteid);
+	CheckError(err);
+	db.Close();
+}
+
+func GetNoteById(noteid string, userid string) string {
+	db := ConnectToDB("./db/note.db");
+	rows, err := db.Query("select note from notes where id = ? and userid = ?", noteid, userid);
+	CheckError(err);
+	result := "";
+	if rows.Next() {
+		err = rows.Scan(&result);
+		CheckError(err);
+	}
+	rows.Close();
+	db.Close();
+	return result;
+}
+
 func DeleteNote(id string) {
 	db := ConnectToDB("./db/note.db");
 	statement, err := db.Prepare("delete from notes where id = ?;");
