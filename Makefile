@@ -1,3 +1,5 @@
+PodBuilder ?= podman
+
 todo: main.go ./db/note.db sqlC.go *_templ.go
 	go build -o todo .
 
@@ -18,8 +20,4 @@ cleanAll:
 
 podman: todo
 	[ -e todo.tar.gz ] && rm -rf todo.tar.gz || echo "first time?"
-	podman build -t mte_p . && podman save -o todo.tar mte_p && gzip todo.tar && podman image rm mte_p
-
-docker: todo
-	[ -e todo.tar.gz ] && rm -rf todo.tar.gz || echo "first time?"
-	docker build -t mte_p . && docker save -o todo.tar mte_p && gzip todo.tar && docker image rm mte_p
+	$(PodBuilder) build -t mte_p . && $(PodBuilder) save -o todo.tar mte_p && gzip todo.tar && $(PodBuilder) image rm mte_p
