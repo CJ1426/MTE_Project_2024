@@ -4,5 +4,8 @@ Needed :
     - github.com/a-h/templ/cmd/templ@latest
 
 setup
-    PATH=[GO BIN PATH]:$PATH
     go get
+    PATH=$(go env GOPATH)/bin:$PATH
+
+load docker image:
+    docker load -i todo.tar.gz
