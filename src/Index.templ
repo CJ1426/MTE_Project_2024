@@ -61,7 +61,7 @@ templ Index(allNote map[uint]string) {
 	</html> 
 }
 
-templ EnterPW() {
+templ EnterPW(err bool) {
 	<!DOCTYPE html>
 	<html>
 	<head>
@@ -75,6 +75,11 @@ templ EnterPW() {
 		<form action="/varl" method="post">
 			<input class="form-control mt-4" type="text" name="uname" placeholder="username" autofocus required></br> 
 			<input class="form-control my-4" type="password" name="passd" placeholder="password" required></br>
+			if err {
+			<div class="alert alert-danger">
+				username or password is incorrect
+			</div>
+			}
 			<input class="btn btn-primary" type="submit" value="login">
 			<a href="/reg" class="btn btn-warning">sign up</a>
 		</form>
@@ -84,7 +89,7 @@ templ EnterPW() {
 	</html> 
 }
 
-templ Regis() {
+templ Regis(err bool) {
 	<!DOCTYPE html>
 	<html>
 	<head>
@@ -98,6 +103,11 @@ templ Regis() {
 		<form action="/reg" method="post">
 			<input class="form-control mt-4" type="text" name="uname" placeholder="username" autofocus required></br> 
 			<input class="form-control my-4" type="password" name="passd" placeholder="password" required></br>
+			if err {
+			<div class="alert alert-danger">
+				This username is already been used!
+			</div>
+			}
 			<input class="btn btn-primary" type="submit" value="sign up">
 		</form>
 		</div>

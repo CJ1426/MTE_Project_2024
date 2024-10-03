@@ -29,7 +29,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 				}
 				http.SetCookie(w, &cookie);
 			}
-			Redirect("/").Render(r.Context(), w);
+			Redirect("/?err=1").Render(r.Context(), w);
 		} else if (r.URL.Path == "/reg") {
 			if (r.Method == "POST") {
 				id := CreateUser(r.FormValue("uname") ,r.FormValue("passd"));
@@ -45,12 +45,20 @@ func handler(w http.ResponseWriter, r *http.Request) {
 					}
 					http.SetCookie(w, &cookie);
 				}
-				Redirect("/").Render(r.Context(), w);
+				Redirect("/reg?err=1").Render(r.Context(), w);
 			} else {
-				Regis().Render(r.Context(), w);
+				isErr := false;
+				if r.URL.Query().Get("err") != "" {
+					isErr = true;
+				}
+				Regis(isErr).Render(r.Context(), w);
 			}
 		} else {
-			EnterPW().Render(r.Context(), w);
+			isErr := false;
+			if r.URL.Query().Get("err") != "" {
+				isErr = true;
+			}
+			EnterPW(isErr).Render(r.Context(), w);
 		}
 	} else {
 		switch r.Method {
