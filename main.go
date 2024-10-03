@@ -44,8 +44,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 						SameSite: http.SameSiteLaxMode,
 					}
 					http.SetCookie(w, &cookie);
-				}
+					Redirect("/").Render(r.Context(), w);
+				} else {
 				Redirect("/reg?err=1").Render(r.Context(), w);
+				}
 			} else {
 				isErr := false;
 				if r.URL.Query().Get("err") != "" {
