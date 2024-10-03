@@ -15,3 +15,9 @@ clean:
 
 cleanAll:
 	rm -rf ./todo ./db/note.db ./*_templ.go
+
+podman: todo
+	podman build -t mte_p . && podman save -o todo.tar mte_p && gzip todo.tar && podman image rm mte_p
+
+docker: todo
+	docker build -t mte_p . && docker save -o todo.tar mte_p && gzip todo.tar && docker image rm mte_p
